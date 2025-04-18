@@ -10,23 +10,32 @@ import Components, { Height, Login } from './src/Pages/Components/Components';
 import UseCallbackHook from './src/Pages/useCallbackHook/UseCallbackHook';
 import UseMemoHook from './src/Pages/useMemoHook/UseMemoHook';
 import UseContextHook from './src/Pages/useContextHook/UseContextHook';
+import AppNavigator from './src/Navigation/AppNavigator';
+import { NavigationContainer } from '@react-navigation/native';
 
 
 const App = () => {
 
-  return (
-    <View>
-      {/* <StatusBar barStyle={'dark-content'} /> */}
-      {/* <Text>App</Text> */}
-      {/* <Components />
+  return <NavigationContainer> 
+    <AppNavigator />
+  </NavigationContainer>
+  // <View>
+
+  {/* <StatusBar barStyle={'dark-content'} /> */ }
+  {/* <Text>App</Text> */ }
+  {/* <Components />
       <Login /> */}
 
-      {/* <UseCallbackHook /> */}
-      {/* <UseMemoHook /> */}
+  {/* <UseCallbackHook /> */ }
+  {/* <UseMemoHook /> */ }
 
-      <UseContextHook />
-    </View>
-  )
+  {/* <UseContextHook /> */ }
+
+
+
+
+  {/* </View> */ }
+
 }
 
 export default App;
