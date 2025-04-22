@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, Image, StyleSheet, Text, View } from 'react-native';
-import { getRequest } from '../../api/api';
+import { Alert, FlatList, Image, StyleSheet, Text, View } from 'react-native';
+import { deleteRequest, getRequest } from '../../api/api';
 import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useIsFocused } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 
 
 
 const UserList = () => {
 
-  const isFocused = useIsFocused()
+  const isFocused = useIsFocused();
+  const navigation = useNavigation()
   const [usersData, setUsersData] = useState([])
 
 
@@ -28,6 +29,26 @@ const UserList = () => {
   useEffect(() => {
     fetchUserList()
   }, [isFocused])
+
+
+  const onDeleteUser = async(id) => {
+    try {
+      const res = await deleteRequest(`data/${id}`);
+      console.log(res)
+      Alert.alert('Success', 'User Deleted Successfully', [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {text: 'OK', onPress: () => { fetchUserList()}},
+      ]);
+     
+     
+    } catch (error) {
+      
+    }
+  }
 
   const renderUserItem = (props) => {
     const { item } = props;
@@ -48,10 +69,10 @@ const UserList = () => {
             </View>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 10 }}>
                 <View style={styles.iconContainer}>
-                    <Feather onPress={() => navigation.navigate('AddUser', { data: item, isEdit: true })} name="edit" size={30} color="black" />
+                    <Feather onPress={() => navigation.navigate('UserRegister', { data: item, isEdit: true })} name="edit" size={30} color="black" />
                 </View>
                 <View style={styles.iconContainer}>
-                    <AntDesign onPress={() => onDeleteUser(item.id)} name="delete" size={30} color="black" />
+                    <AntDesign onPress={() => onDeleteUser(item.id)} name="delete" size={30} color="red" />
                 </View>
             </View>
         </View>

@@ -4,13 +4,15 @@ import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'reac
 import { RadioButton } from 'react-native-paper';
 import DropDownPicker from 'react-native-dropdown-picker';
 import * as yup from 'yup';
-import { getRequest, getRequestForCountry, postRequest } from '../../api/api';
-import { useNavigation } from '@react-navigation/native';
+import { getRequest, getRequestForCountry, postRequest, putRequest } from '../../api/api';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 
 const UserRegister = () => {
     // const [username, setUsername] = useState()
-    const navigation = useNavigation()
+    const navigation = useNavigation();
+    const route = useRoute();
+    const { data, isEdit } = route.params;
     const [countryOpen, setCountryOpen] = useState(false);
     const [countryList, setCountryList] = useState([])
     const [stateOpen, setStateOpen] = useState(false);
@@ -22,13 +24,12 @@ const UserRegister = () => {
     });
 
     let initialValues = {
-        username: '',
-        email: '',
-        gender: '',
-        country: '',
-        state: ''
+        username: isEdit ? data.username : '',
+        email: isEdit ? data.email : '',
+        gender: isEdit ? data.gender : '',
+        country: isEdit ? data.country : '',
+        state: isEdit ? data.state : ''
     }
-
     const fetchCountry = async () => {
         try {
             const res = await getRequestForCountry('v1/countries');
@@ -63,23 +64,33 @@ const UserRegister = () => {
         }
     }
 
+    const successAlert = (msg) => {
+        Alert.alert('Success', msg)
+        initialValues = {
+            username: '',
+            email: '',
+            gender: '',
+            country: '',
+            state: ''
+        }
+        navigation.goBack()
+    }
+
     const onRegister = async (values) => {
         try {
             const payload = {
                 ...values,
-                id: Date.now()
+                id: isEdit ? data.id : Date.now()
             }
             console.log(payload)
-            const res = await postRequest('data', payload);
-            Alert.alert('Success', "User Registered Successfully")
-            initialValues = {
-                username: '',
-                email: '',
-                gender: '',
-                country: '',
-                state: ''
+            if (isEdit) {
+                const res = await putRequest(`data/${payload.id}`, payload);
+                successAlert('User Updated Successfully')
+            } else {
+                const res = await postRequest('data', payload);
+                successAlert('User Registered Successfully')
             }
-            navigation.goBack()
+
         } catch (error) {
 
         }
@@ -91,9 +102,13 @@ const UserRegister = () => {
     }, [])
     return (
         <View style={{ flex: 1, margin: 20 }}>
-            <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={(values) => {
-                onRegister(values)
-            }}>
+            <Formik
+                initialValues={initialValues}
+                validationSchema={validationSchema}
+                enableReinitialize={true}
+                onSubmit={(values) => {
+                    onRegister(values)
+                }}>
                 {
                     ({ values, setFieldValue, handleSubmit, errors, resetForm }) => {
                         return (
@@ -179,7 +194,7 @@ const UserRegister = () => {
                                     </View>}
 
                                 <TouchableOpacity onPress={handleSubmit} style={styles.btn}>
-                                    <Text style={{ alignSelf: 'center' }}>Submit</Text>
+                                    <Text style={{ alignSelf: 'center' }}>{isEdit ? 'Update' : 'Submit'}</Text>
                                 </TouchableOpacity>
                             </View>
                         )

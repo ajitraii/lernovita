@@ -12,12 +12,17 @@ import UseMemoHook from './src/Pages/useMemoHook/UseMemoHook';
 import UseContextHook from './src/Pages/useContextHook/UseContextHook';
 import AppNavigator from './src/Navigation/AppNavigator';
 import { NavigationContainer } from '@react-navigation/native';
+import { Provider } from 'react-redux';
+import { Store } from './src/redux/Store';
+
 
 
 const App = () => {
 
-  return <NavigationContainer> 
-    <AppNavigator />
+  return <NavigationContainer>
+    <Provider store={Store}>
+      <AppNavigator />
+    </Provider>
   </NavigationContainer>
   // <View>
 

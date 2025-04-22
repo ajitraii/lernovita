@@ -1,36 +1,20 @@
 {
   "data": [
     {
-      "id": "1",
-      "name": "ajit",
+      "username": "Ajit",
       "email": "ajitrai@gmail.com",
       "gender": "male",
-      "country": "",
-      "state": ""
+      "country": "IN",
+      "state": "HR",
+      "id": "1"
     },
     {
-      "id": 1744943625339,
+      "id": "1744943625339",
       "username": "Karthick",
       "email": "karthick@gmail.comi",
       "gender": "male",
       "country": "AF",
       "state": "GHA"
-    },
-    {
-      "id": 1744943881276,
-      "username": "suman",
-      "email": "suman@gmail.com",
-      "gender": "female",
-      "country": "IN",
-      "state": "HR"
-    },
-    {
-      "id": 1744944078442,
-      "username": "suman12",
-      "email": "suman12@gmail.com",
-      "gender": "female",
-      "country": "IN",
-      "state": "HR"
     }
   ]
 }

@@ -7,6 +7,7 @@ import Icon from 'react-native-vector-icons/Entypo';
 import { Text, View } from 'react-native';
 import CustomDrawer from '../Components/CustomDrawer/CustomDrawer';
 import BottomTab from './BottomTab';
+import AddUser from '../Pages/screens/addUser';
 
 
 const Drawer = createDrawerNavigator()
@@ -32,7 +33,8 @@ const DrawerNavigator = () => {
                     )
                 }
             }} />
-            <Drawer.Screen name="Profile" component={Profile} />
+            <Drawer.Screen name="Profile" component={Profile} options={{headerShown:false}}/>
+            <Drawer.Screen name="AddUser" component={AddUser} options={{headerShown:false}}/>
         </Drawer.Navigator>
     )
 }
