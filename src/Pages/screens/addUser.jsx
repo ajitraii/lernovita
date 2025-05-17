@@ -6,17 +6,19 @@ import { RadioButton } from "react-native-paper";
 import { Formik } from "formik";
 import * as yup from 'yup';
 import { useDispatch } from "react-redux";
-import { addUser } from "../../redux/slices/UserSlice";
-import { useNavigation } from "@react-navigation/native";
+import { addUser, updateUser } from "../../redux/slices/UserSlice";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 const AddUser = () => {
     const dispatch = useDispatch();
-    const navigation = useNavigation()
-
+    const navigation = useNavigation();
+    const route = useRoute()
+    const { data, isEdit } = route.params
     const initialValues = {
-        username: '',
-        email: '',
-        gender: ''
+        username: isEdit ? data.username : '',
+        email: isEdit ? data.email : '',
+        gender: isEdit ? data.gender : '',
+
 
     }
 
@@ -25,25 +27,31 @@ const AddUser = () => {
         username: yup.string().min(3, 'Name should be greater than 3').required('Name is required'),
         email: yup.string().email('Invalid email').required('Email is required'),
     });
-    
-      const successAlert = (msg) => {
-            Alert.alert('Success', msg)
-            initialValues = {
-                username: '',
-                email: '',
-                gender: '',
-             
-            }
-            navigation.goBack()
+
+    const successAlert = (msg) => {
+        Alert.alert('Success', msg)
+        initialValues = {
+            username: '',
+            email: '',
+            gender: ''
+
         }
-    
+        navigation.goBack()
+    }
+
     const onAddOrUpdateUser = (values) => {
         const _values = {
             ...values,
-            id : Date.now()
+            id: isEdit ? data.id : Date.now()
         }
-        dispatch(addUser(_values))
-        successAlert('User Updated Successfully')
+        if (isEdit) {
+            dispatch(updateUser({ id: _values.id, data: _values }))
+            successAlert('User Updated Successfully')
+        } else {
+            dispatch(addUser(_values))
+            successAlert('User Registered Successfully')
+        }
+
     }
     return (
         <SafeAreaView style={{ flex: 1 }}>

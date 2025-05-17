@@ -13,7 +13,8 @@ import UseContextHook from './src/Pages/useContextHook/UseContextHook';
 import AppNavigator from './src/Navigation/AppNavigator';
 import { NavigationContainer } from '@react-navigation/native';
 import { Provider } from 'react-redux';
-import { Store } from './src/redux/Store';
+import { persistedStore, Store } from './src/redux/Store';
+import { PersistGate } from 'redux-persist/integration/react';
 
 
 
@@ -21,7 +22,9 @@ const App = () => {
 
   return <NavigationContainer>
     <Provider store={Store}>
-      <AppNavigator />
+      <PersistGate persistor={persistedStore}>
+        <AppNavigator />
+      </PersistGate>
     </Provider>
   </NavigationContainer>
   // <View>
