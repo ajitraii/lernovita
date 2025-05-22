@@ -5,6 +5,7 @@ import DrawerNavigator from "./DrawerNavigation"
 import ProductPage from "../Pages/productPage/ProductPage"
 import UserDetails from "../Pages/offlinePage/UserDetails"
 import RegUser from "../Pages/offlinePage/RegUser"
+import ImagePicker from "../Pages/camera/ImagePicker"
 
 const Stack = createStackNavigator()
 const AppNavigator = () => {
@@ -14,6 +15,8 @@ const AppNavigator = () => {
             <Stack.Screen name="DrawerNavigator" component={DrawerNavigator} />
             <Stack.Screen name="Detail" component={UserDetails} />
             <Stack.Screen name="RegUser" component={RegUser} />
+            <Stack.Screen name="imagePicker" component={ImagePicker} />
+
 
             {/* <Stack.Screen name="Product" component={ProductPage} /> */}
             {/* <Stack.Screen name="ProductDetail" component={DrawerNavigator} /> */}

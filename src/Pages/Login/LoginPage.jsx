@@ -55,7 +55,7 @@ const LoginPage = () => {
                 // for offline 
                 captureLoginEvent()
                 createUserTable()
-                navigation.navigate('Detail')
+                navigation.navigate('imagePicker')
 
             }} />
         </View>

@@ -3,7 +3,8 @@ import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react
 import { SafeAreaView } from 'react-native-safe-area-context'
 import AppHeader from '../../Components/AppHeader'
 import { useIsFocused, useNavigation } from '@react-navigation/native'
-import { getDBConnection, getUsers } from '../../database/Userdb'
+import { getRealmDb } from '../../realm/Realm'
+
 
 const UserDetails = () => {
     const navigation = useNavigation();
@@ -11,17 +12,16 @@ const UserDetails = () => {
     const [userList, setUserList] = useState([])
 
     const loadUser = async () => {
-        console.log('allUsers', allUsers)
-        const db = await getDBConnection();
-
-        const allUsers = await getUsers(db);
-        console.log('allUsers', allUsers)
-        setUserList(allUsers)
+        const realm = await getRealmDb()
+        // console.log('users', realm)
+        const allUers = realm.objects('User').sorted('_id')
+        console.log('users', allUers)
+        setUserList([...allUers])
     }
 
     useEffect(() => {
         loadUser()
-    }, [isFocused])
+    }, [])
 
     const renderUserItem = (props) => {
         const { item } = props;
@@ -32,7 +32,7 @@ const UserDetails = () => {
                     <Image style={{ height: 70, width: 70, }} source={require('../../Asessts/Images/profile.png')} />
 
                     <View style={{ marginLeft: 30 }}>
-                        <Text style={styles.heading}>{item ? item?.username : ''}</Text>
+                        <Text style={styles.heading}>{item ? item?.name : ''}</Text>
                         <Text style={styles.subHeading}>{item ? item?.email : ''}</Text>
                         <Text style={styles.subHeading}>{item ? item?.gender : ''}</Text>
 
@@ -47,12 +47,13 @@ const UserDetails = () => {
 
         <SafeAreaView style={{ flex: 1 }}>
             <AppHeader title="Offline User" showBackButton={false} onPress={() => navigation.goBack()} />
-            <FlatList
+            {userList.length > 0 ? <FlatList
                 data={userList}
                 keyExtractor={item => item.id}
                 renderItem={renderUserItem}
 
-            />
+            /> : <View>
+                <Text>No User Found</Text></View>}
 
             <TouchableOpacity onPress={() => navigation.navigate('RegUser')} style={styles.addbtn}>
                 <Text style={{ fontSize: 20 }}>+</Text>
